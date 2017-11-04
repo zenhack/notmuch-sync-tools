@@ -3,7 +3,7 @@ import Data.Maybe         (catMaybes, fromMaybe)
 import System.Environment (getArgs)
 
 import qualified Data.ByteString.Char8 as B
-import qualified Data.Map.Strict       as M
+import qualified Data.HashMap.Strict   as M
 import qualified Data.Set              as S
 
 mergeDumps ancestor left right =
