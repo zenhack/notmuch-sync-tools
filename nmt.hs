@@ -3,21 +3,16 @@ import Data.Maybe         (catMaybes, fromMaybe)
 import System.Environment (getArgs)
 
 import qualified Data.ByteString.Char8 as B
-import qualified Data.Map.Merge.Strict as M
 import qualified Data.Map.Strict       as M
 import qualified Data.Set              as S
 
-mergeTags ancestor left right = added `S.union` inBoth
+mergeDumps ancestor left right =
+    M.unionWith S.union added inBoth
   where
-    added = (left `S.union` right) `S.difference` ancestor
-    inBoth = left `S.intersection` right
-
-mergeDumps ancestor = M.merge
-    (M.mapMissing $ \k l -> mergeVal k l S.empty)
-    (M.mapMissing $ \k r -> mergeVal k S.empty r)
-    (M.zipWithMatched mergeVal)
-  where
-    mergeVal k = mergeTags (fromMaybe S.empty $ M.lookup k ancestor)
+    added = M.unionWith S.difference
+        (M.unionWith S.union left right)
+        ancestor
+    inBoth = M.intersectionWith S.intersection left right
 
 parse = B.lines
     .> map (B.words .> reverse .> parseLine)
