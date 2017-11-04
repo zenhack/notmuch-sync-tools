@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-import Data.Maybe         (catMaybes, fromMaybe)
+import Data.Maybe         (catMaybes)
 import System.Environment (getArgs)
 
 import qualified Data.ByteString.Char8 as B
