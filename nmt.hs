@@ -14,17 +14,15 @@ mergeDumps ancestor left right =
         ancestor
     inBoth = M.intersectionWith S.intersection left right
 
-parse = B.lines
-    .> map (B.words .> reverse .> parseLine)
-    .> catMaybes
-    .> M.fromList
+parse = M.fromList
+    . catMaybes
+    . map (parseLine . reverse . B.words)
+    . B.lines
   where
     parseLine (name:"--":tags) = Just $ (name, S.fromList tags)
     parseLine _                = Nothing
 
-(.>) = flip (.)
-
-showDump = M.toList .> map showLine .> B.unlines
+showDump = B.unlines . map showLine . M.toList
   where
     showLine (name, tags) = B.unwords $ reverse $ name:"--":S.toList tags
 
