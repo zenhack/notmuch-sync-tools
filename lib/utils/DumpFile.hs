@@ -24,6 +24,11 @@ mergePartial :: Dump -> PartialDump -> PartialDump -> Dump
 mergePartial old (PartialDump leftPart) (PartialDump rightPart) =
     mergeMaps old (M.union leftPart old) (M.union rightPart old)
 
+-- | @'buildPartial' old new@ builds a partial dump containing all messages
+-- that have been changed between old and new.
+buildPartial :: Dump -> Dump -> PartialDump
+buildPartial old new = PartialDump $ M.filterWithKey (\k v -> M.lookup k old /= Just v) new
+
 -- | @'mergeSets' old left right@ performs a 3-way merge of the sets @left@ and
 -- @right@, using common ancestor @old@
 mergeSets :: TagSet -> TagSet -> TagSet -> TagSet
