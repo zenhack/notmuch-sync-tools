@@ -28,5 +28,6 @@ getDBInfo = do
 
 getDumpSince :: Int -> IO PartialDump
 getDumpSince lastMod = do
-    output <- readProcess "notmuch" ["dump", "--", "--lastmod:" ++ show lastMod] ""
+    output <- readProcess
+        "notmuch" ["dump", "--", "lastmod:" ++ show lastMod ++ ".."] ""
     return $ PartialDump $ parseDump $ B8.pack output
