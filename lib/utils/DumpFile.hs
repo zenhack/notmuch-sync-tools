@@ -1,10 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module DumpFile where
 
-import Data.Function      (on, (&))
-import Data.Maybe         (catMaybes)
-import System.Environment (getArgs)
-import System.Exit        (exitFailure)
+import Data.Function (on, (&))
+import Data.Maybe    (catMaybes)
 
 import qualified Data.ByteString.Char8 as B8
 -- Experimentally, Set + HashMap performs better than HashSet + HashMap or Set +
@@ -70,19 +68,3 @@ showDump dump =
         name:"--":S.toList tags &
         reverse &
         B8.unwords
-
-main = do
-    args <- getArgs
-    case args of
-        [old, left, right, result] -> nmtmerge old left right result
-        _                          -> usage
-  where
-    usage = do
-        putStrLn "usage : nmtmerge <old> <left> <right> <result>"
-        exitFailure
-    nmtmerge old left right result = do
-        newDump <- mergeMaps
-            <$> (parseDump <$> B8.readFile old)
-            <*> (parseDump <$> B8.readFile left)
-            <*> (parseDump <$> B8.readFile right)
-        B8.writeFile result (showDump newDump)

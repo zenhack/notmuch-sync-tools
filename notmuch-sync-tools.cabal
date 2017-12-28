@@ -34,5 +34,6 @@ executable notmuch-tagmerge
   build-depends:
       base >=4.10 && <4.11
     , notmuch-utils
+    , bytestring
   hs-source-dirs:      exe/notmuch-tagmerge
   default-language:    Haskell2010
