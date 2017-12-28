@@ -22,8 +22,10 @@ library notmuch-utils
     , bytestring
     , containers
     , unordered-containers
+    , process
   exposed-modules:
-    DumpFile
+      DumpFile
+    , Query
   hs-source-dirs:      lib/utils
   default-language:    Haskell2010
 

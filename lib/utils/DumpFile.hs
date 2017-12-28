@@ -14,6 +14,16 @@ type Dump = M.HashMap B8.ByteString (S.Set B8.ByteString)
 
 type TagSet = S.Set B8.ByteString
 
+-- | A "partial" dump. This is the same thing as a dump, but does not include all
+-- messages; just a subset that have been modified "recently."
+newtype PartialDump = PartialDump Dump
+
+-- | Like @'mergeMaps'@ except that @left@ and @right@ are partial dumps. They
+-- must both include all messages modified since @old@.
+mergePartial :: Dump -> PartialDump -> PartialDump -> Dump
+mergePartial old (PartialDump leftPart) (PartialDump rightPart) =
+    mergeMaps old (M.union leftPart old) (M.union rightPart old)
+
 -- | @'mergeSets' old left right@ performs a 3-way merge of the sets @left@ and
 -- @right@, using common ancestor @old@
 mergeSets :: TagSet -> TagSet -> TagSet -> TagSet
