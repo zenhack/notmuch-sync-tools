@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Main where
+module DumpFile where
 
 import Data.Function      (on, (&))
 import Data.Maybe         (catMaybes)
@@ -41,6 +41,13 @@ mergeMaps old left right =
       where
         getVal = M.lookupDefault S.empty key
 
+-- 'parseDump' parses its argument, which must be in the format emitted by
+-- @notmuch-dump(1)@, into a 'Dump'. Note that the parser simply ignores lines
+-- that don't fit the format it expects, so this won't ever actually fail.
+--
+-- TODO: we probably can (and should) make the parser a little more
+-- restrictive; I(zenhack) think all non-coforming lines start with '#'.
+parseDump :: B8.ByteString -> Dump
 parseDump input =
     B8.lines input &
     map parseSet &
@@ -51,6 +58,9 @@ parseDump input =
         (name:"--":tags) -> Just (name, S.fromList tags)
         _                -> Nothing
 
+-- 'showDump' outputs its argument formatted as emitted by @notmuch-dump(1)@
+-- (and expected by @notmuch-restore@).
+showDump :: Dump -> B8.ByteString
 showDump dump =
     M.toList dump &
     map showLine &
