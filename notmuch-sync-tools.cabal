@@ -26,6 +26,7 @@ library notmuch-utils
   exposed-modules:
       DumpFile
     , Query
+    , Rpc
   hs-source-dirs:      lib/utils
   default-language:    Haskell2010
 
